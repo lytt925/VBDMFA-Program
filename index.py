@@ -12,10 +12,7 @@ If you publish work using this script the most relevant publication is:
 """
 
 from __future__ import absolute_import, division
-from ratingRoutines.components import *
-from ratingRoutines.makeStim import makeStim
-from ratingRoutines.vbdmRound import *
-from ratingRoutines.ratings import singleImage
+
 
 from psychopy import locale_setup
 from psychopy import prefs
@@ -48,6 +45,11 @@ expInfo['date'] = data.getDateStr(
     format="%Y-%m-%d-%H%M")  # add a simple timestamp
 expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
+
+from ratingRoutines.components import *
+from ratingRoutines.makeStim import makeStim
+from ratingRoutines.vbdmRound import *
+from ratingRoutines.ratings import singleImage
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + \

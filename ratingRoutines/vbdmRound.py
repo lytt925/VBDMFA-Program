@@ -7,25 +7,6 @@ from psychopy.hardware import keyboard
 frameTolerance = 0.001  # how close to onset before 'same' frame
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
-leftImg = visual.ImageStim(
-    win=win,
-    name='leftImage', 
-    image=None, mask=None,
-    ori=0.0, pos=(-180, 100), size=(180),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=0.0)
-
-rightImg = visual.ImageStim(
-    win=win,
-    name='rightImage', 
-    image=None, mask=None,
-    ori=0.0, pos=(180, 100), size=(180),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=0.0)
-
-key_Choice = keyboard.Keyboard()
 
 
 def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure):

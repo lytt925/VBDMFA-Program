@@ -14,7 +14,7 @@ image = visual.ImageStim(
     name='image', 
     image=None, mask=None,
     ori=0.0, pos=(0, 100), size=(200),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
+    color=[1,1,1], colorSpace='rgb',
     flipHoriz=False, flipVert=False,
     texRes=128.0, interpolate=True, depth=0.0)
 
@@ -22,11 +22,14 @@ slider = visual.Slider(win=win, name='slider',
     size=(400, 40), pos=(0, -100), units=None,
     labels=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10], ticks=(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 
     granularity=1.0,
-    style=('rating', 'whiteOnBlack'), styleTweaks=(), opacity=None,
-    color='black', font='HelveticaBold', fillColor='Red', borderColor='White',
-    colorSpace='rgb', labelHeight=20,
+    style=('rating', 'whiteOnBlack'),
+    color='black', font='HelveticaBold', labelHeight=20,
     flip=False, depth=-1, readOnly=False)
 slider.markerPos = None
+slider.marker.fillColor='Red'
+slider.marker.lineColor='Red'
+slider.marker.size=[30,30]
+print(slider.marker)
 
 Text_notAttractive = visual.TextStim(win=win, name='notAttractive', ori=0, 
     color='black', font='HelveticaBold',pos=(-520,-100), height=26, wrapWidth=None,
@@ -67,6 +70,26 @@ cross = visual.ShapeStim(
     ori=0.0, pos=(0, 0),
     lineWidth=1.0,  lineColor='black', fillColor='black',
     opacity=1, depth=0.0, interpolate=True)
+
+leftImg = visual.ImageStim(
+    win=win,
+    name='leftImage', 
+    image=None, mask=None,
+    ori=0.0, pos=(-180, 100), size=(180),
+    color=[1,1,1], colorSpace='rgb',
+    flipHoriz=False, flipVert=False,
+    texRes=128.0, interpolate=True, depth=0.0)
+
+rightImg = visual.ImageStim(
+    win=win,
+    name='rightImage', 
+    image=None, mask=None,
+    ori=0.0, pos=(180, 100), size=(180),
+    color=[1,1,1], colorSpace='rgb',
+    flipHoriz=False, flipVert=False,
+    texRes=128.0, interpolate=True, depth=0.0)
+
+key_Choice = keyboard.Keyboard()
 
 def StartInterface():
     text_wait.draw()
@@ -181,4 +204,6 @@ button.buttonClock = core.Clock()
 mouse = event.Mouse(win=win)
 x, y = [None, None]
 mouse.mouseClock = core.Clock()
+
+
 
