@@ -54,7 +54,7 @@ text_wait = visual.ImageStim(win=win, name='wait',
     image='./ratingRoutines/StartInterface.png', mask=None, pos = (0,100), size = (2680/2,271/2))
 
 text_end = visual.TextStim(win=win, name='end',
-    text='實驗結束', font='Calibri',
+    text='', font='Calibri',
     color='black', pos = (0,100))
 
 text_rest = visual.TextStim(win=win, name='end',
@@ -114,7 +114,8 @@ def StartInterface():
     win.flip()
 
 
-def EndInterface():
+def EndInterface(accuracy):
+    text_end.text=f'實驗結束\n你在這800回合中的正確率是: {accuracy*100}%\n你的受試者費是 300 + 150x{accuracy}={300 + 150*accuracy}'
     text_end.draw()
     button.draw()
     win.flip()

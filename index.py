@@ -171,7 +171,11 @@ for stim in stimList2_All:
     Interval(2)
 
 ###########################################################
+VBDMresult = pd.read_csv(filename+'_Choice'+'.csv')
+accuracy = VBDMresult['Correct'].mean()
+EndInterface(accuracy)
 
+############################################################
 # Flip one final time so any remaining win.callOnFlip()
 # and win.timeOnFlip() tasks get executed before quitting
 win.flip()
