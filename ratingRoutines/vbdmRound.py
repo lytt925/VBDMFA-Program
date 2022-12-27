@@ -119,9 +119,9 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
     ans = key_Choice.keys
     if isinstance(ans, str) and ans in ['right', 'left']:
         if corAns == ans:
-            correct=True
+            correct=1
         else:
-            correct=False
+            correct=0
 
     thisExp.addData('Trial', str(difficulty)+'_'+leftPic[:-4]+"_"+rightPic[:-4])
     thisExp.addData('choice', key_Choice.keys)
