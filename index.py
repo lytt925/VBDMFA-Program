@@ -12,6 +12,10 @@ If you publish work using this script the most relevant publication is:
 """
 
 from __future__ import absolute_import, division
+from ratingRoutines.components import *
+from ratingRoutines.makeStim import makeStim
+from ratingRoutines.vbdmRound import *
+from ratingRoutines.ratings import singleImage
 
 from psychopy import locale_setup
 from psychopy import prefs
@@ -27,6 +31,7 @@ import os  # handy system and path functions
 import sys  # to get file system encoding
 import re
 import pandas as pd
+from itertools import count
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -39,37 +44,36 @@ expInfo = {'participant': ''}
 dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
 if dlg.OK == False:
     core.quit()  # user pressed cancel
-expInfo['date'] = data.getDateStr(format = "%Y-%m-%d-%H%M")  # add a simple timestamp
+expInfo['date'] = data.getDateStr(
+    format="%Y-%m-%d-%H%M")  # add a simple timestamp
 expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
+filename = _thisDir + os.sep + \
+    u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
 
 # An ExperimentHandler isn't essential but helps with data saving
 thisExpRating = data.ExperimentHandler(name=expName+'_Rating', version='',
-    extraInfo=expInfo, runtimeInfo=None,
-    savePickle=False, saveWideText=True,
-    dataFileName=filename+'_Rating')
+                                       extraInfo=expInfo, runtimeInfo=None,
+                                       savePickle=False, saveWideText=True,
+                                       dataFileName=filename+'_Rating')
 
 thisExpChoice = data.ExperimentHandler(name=expName+'_Choice', version='',
-    extraInfo=expInfo, runtimeInfo=None,
-    savePickle=False, saveWideText=True,
-    dataFileName=filename+'_Choice')
+                                       extraInfo=expInfo, runtimeInfo=None,
+                                       savePickle=False, saveWideText=True,
+                                       dataFileName=filename+'_Choice')
 
 # save a log file for detail verbose info
 logFile = logging.LogFile(filename+'.log', level=logging.EXP)
-logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
+# this outputs to the screen, not a file
+logging.console.setLevel(logging.WARNING)
 
 # Setup eyetracking
 ioDevice = ioConfig = ioSession = ioServer = eyetracker = None
 
 
 # Start Code - component code to be run after the window creation
-from ratingRoutines.components import * 
-from ratingRoutines.ratings import singleImage
-from ratingRoutines.vbdmRound import *
-from ratingRoutines.makeStim import makeStim
 
 # store frame rate of monitor if we can measure it
 expInfo['frameRate'] = win.getActualFrameRate()
@@ -90,19 +94,21 @@ for img in faceList[:10]:
     singleImage(thisExpRating, img)
 
 thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim='auto')
-print('filename:', filename+'_RatingBackup'+'.csv') # 不用這個會找不到檔案
+print('filename:', filename+'_RatingBackup'+'.csv')  # 不用這個會找不到檔案
 
 ###########################################################
 Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
 # print(Rating)
 # Rating = pd.read_csv('data/1_Rating_2022-12-25-1438_Rating.csv')
-Rating = Rating.sort_values('Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
+Rating = Rating.sort_values(
+    'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
 Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
-ratings_counts=Rating['rating'].value_counts()
+ratings_counts = Rating['rating'].value_counts()
 print('ratings_counts', ratings_counts)
-allcounts = [ratings_counts[i] for i in range(5,10)]
+allcounts = [ratings_counts[i] for i in range(5, 10)]
 temp = [list(np.repeat(i+5, count)) for i, count in enumerate(allcounts)]
-ratings = [[str(level)+'_'+str(ind+1) for ind,level in enumerate(levelList)] for levelList in temp]
+ratings = [[str(level)+'_'+str(ind+1)
+            for ind, level in enumerate(levelList)] for levelList in temp]
 stimDict = {}
 for i, level in enumerate(ratings):
     iterator = iter(list(Rating[Rating['rating'] == i+5]['Name']))
@@ -116,14 +122,18 @@ stimList2_All = [stim for diffList in stimList2 for stim in diffList]
 np.random.shuffle(stimList2_All)
 
 ##########################################################
-isPressureFirst = bool(int(expInfo['participant'])%2)
+isPressureFirst = bool(int(expInfo['participant']) % 2)
 if isPressureFirst:
     instructionImg = './ratingRoutines/Pressure.png'
 else:
     instructionImg = './ratingRoutines/noPressure.png'
 
 InstructionInterface(instructionImg)
+firstRound = count()
 for stim in stimList1_All:
+    c = next(firstRound)
+    if c % 10 == 0 and c != 0:
+        restInterface()   
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
     rightInd = abs(leftInd-1)
@@ -139,7 +149,12 @@ else:
     instructionImg = './ratingRoutines/noPressure.png'
 
 InstructionInterface(instructionImg)
+
+secRound = count()
 for stim in stimList2_All:
+    c = next(secRound)
+    if c % 10 == 0 and c != 0:
+        restInterface()   
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
     rightInd = abs(leftInd-1)
@@ -150,7 +165,7 @@ for stim in stimList2_All:
 
 ###########################################################
 
-# Flip one final time so any remaining win.callOnFlip() 
+# Flip one final time so any remaining win.callOnFlip()
 # and win.timeOnFlip() tasks get executed before quitting
 win.flip()
 

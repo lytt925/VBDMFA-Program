@@ -54,6 +54,10 @@ text_end = visual.TextStim(win=win, name='end',
     text='實驗結束', font='Calibri',
     color='black', pos = (0,100))
 
+text_rest = visual.TextStim(win=win, name='end',
+    text='休息時間，按OK以繼續', font='Calibri',
+    color='black', pos = (0,100))
+
 text_instruction = visual.ImageStim(win=win, name='ins', 
     mask=None, pos = (0,100), size=(2725/2, 424/2))
 
@@ -88,6 +92,28 @@ def StartInterface():
 
 
 def EndInterface():
+    text_end.draw()
+    button.draw()
+    win.flip()
+    gotValidClick = False
+    prevButtonState = mouse.getPressed()
+    keys = ['placeholder']
+    while not gotValidClick:
+        buttons = mouse.getPressed()
+        if buttons != prevButtonState:  # button state changed?
+            prevButtonState = buttons
+            if sum(buttons) > 0:  # state changed to a new click
+                # check if the mouse was inside our 'clickable' objects
+                gotValidClick = False
+                if button.contains(mouse):
+                    gotValidClick = True
+        theseKeys = defaultKeyboard.getKeys(keyList=['escape'], waitRelease=True)
+        keys.extend(theseKeys)
+        if  keys[-1] == 'escape':
+            core.quit()
+    win.flip()
+
+def restInterface():
     text_end.draw()
     button.draw()
     win.flip()
