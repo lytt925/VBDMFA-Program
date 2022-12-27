@@ -137,7 +137,7 @@ def EndInterface(accuracy):
     win.flip()
 
 def restInterface():
-    text_end.draw()
+    text_rest.draw()
     button.draw()
     win.flip()
     gotValidClick = False
