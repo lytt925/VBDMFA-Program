@@ -92,11 +92,11 @@ faceList = os.listdir('Face Choose')
 faceList = sorted(faceList, key=lambda x: int(re.search('\d+', x)[0]))
 np.random.shuffle(faceList)
 # print(faceList)
-for img in faceList[:10]:
+for img in faceList:
     singleImage(thisExpRating, img)
 
-thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim='auto')
-print('filename:', filename+'_RatingBackup'+'.csv')  # 不用這個會找不到檔案
+thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim=',')
+#print('filename:', filename+'_RatingBackup'+'.csv')  # 不用這個會找不到檔案
 
 ###########################################################
 Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
@@ -137,13 +137,22 @@ for stim in stimList1_All:
     c = next(firstRound)
     if c % 50 == 0 and c != 0:
         restInterface()   
+    Interval(2)
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
     rightInd = abs(leftInd-1)
     left = stimDict[stim[leftInd]]
     right = stimDict[stim[rightInd]]
-    VBDM(thisExpChoice, right, left, difficulty, isPressureFirst)
-    Interval(2)
+    print(left, stim[leftInd])
+    print(right, stim[rightInd])
+    if int(stim[leftInd][0]) > int(stim[rightInd][0]):
+        print('left big')
+        corAns = 'left'
+    elif int(stim[leftInd][0]) < int(stim[rightInd][0]):
+        corAns = 'right'
+        print('right big')
+    print('corAns',corAns)
+    VBDM(thisExpChoice, left, right, difficulty, isPressureFirst, corAns=corAns)
 
 ########################################################
 if not isPressureFirst:
@@ -158,6 +167,7 @@ for stim in stimList2_All:
     c = next(secRound)
     if c % 50 == 0 and c != 0:
         restInterface()   
+    Interval(2)
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
     rightInd = abs(leftInd-1)
@@ -165,13 +175,13 @@ for stim in stimList2_All:
     right = stimDict[stim[rightInd]]
     if int(stim[leftInd][0]) > int(stim[rightInd][0]):
         corAns = 'left'
-    else:
+    elif int(stim[leftInd][0]) < int(stim[rightInd][0]):
         corAns = 'right'
     VBDM(thisExpChoice, left, right, difficulty, not isPressureFirst, corAns=corAns)
-    Interval(2)
 
 ###########################################################
-VBDMresult = pd.read_csv(filename+'_Choice'+'.csv')
+thisExpChoice.saveAsWideText(filename+'_ChoiceBackup'+'.csv', delim=',')
+VBDMresult = pd.read_csv(filename+'_ChoiceBackup'+'.csv')
 accuracy = VBDMresult['Correct'].mean()
 EndInterface(accuracy)
 
@@ -181,7 +191,7 @@ EndInterface(accuracy)
 win.flip()
 
 # these shouldn't be strictly necessary (should auto-save)
-thisExpChoice.saveAsWideText(filename+'_Choice'+'.csv', delim='auto')
+# thisExpChoice.saveAsWideText(filename+'_Choice'+'.csv', delim=',')
 logging.flush()
 # make sure everything is closed down
 thisExpRating.abort()  # or data files will save again on exit

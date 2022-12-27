@@ -29,7 +29,6 @@ slider.markerPos = None
 slider.marker.fillColor='Red'
 slider.marker.lineColor='Red'
 slider.marker.size=[30,30]
-print(slider.marker)
 
 Text_notAttractive = visual.TextStim(win=win, name='notAttractive', ori=0, 
     color='black', font='HelveticaBold',pos=(-520,-100), height=26, wrapWidth=None,

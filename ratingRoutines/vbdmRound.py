@@ -117,6 +117,7 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
             thisComponent.setAutoDraw(False)
 
     ans = key_Choice.keys
+    correct=None
     if isinstance(ans, str) and ans in ['right', 'left']:
         if corAns == ans:
             correct=1
@@ -124,6 +125,7 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
             correct=0
 
     thisExp.addData('Trial', str(difficulty)+'_'+leftPic[:-4]+"_"+rightPic[:-4])
+    thisExp.addData('CorrectAns', corAns)
     thisExp.addData('choice', key_Choice.keys)
     thisExp.addData('RT', key_Choice.rt)
     thisExp.addData('Correct', correct)
