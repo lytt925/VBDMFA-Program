@@ -9,7 +9,7 @@ endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
 
 
-def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure):
+def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
     # setup image
     leftImg.image = 'Face Choose/'+leftPic
     rightImg.image = 'Face Choose/' + rightPic
@@ -116,9 +116,17 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure):
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
 
+    ans = key_Choice.keys
+    if isinstance(ans, str) and ans in ['right', 'left']:
+        if corAns == ans:
+            correct=True
+        else:
+            correct=False
+
     thisExp.addData('Trial', str(difficulty)+'_'+leftPic[:-4]+"_"+rightPic[:-4])
     thisExp.addData('choice', key_Choice.keys)
     thisExp.addData('RT', key_Choice.rt)
+    thisExp.addData('Correct', correct)
     thisExp.addData('key.started', key_Choice.tStartRefresh)
     thisExp.addData('key.stopped', key_Choice.tStopRefresh)
     # store data for thisExp (ExperimentHandler)
@@ -126,4 +134,6 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure):
     thisExp.nextEntry()
     # the Routine "trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
+
+    return key_Choice.keys
 

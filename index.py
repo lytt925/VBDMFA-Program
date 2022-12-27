@@ -123,6 +123,7 @@ np.random.shuffle(stimList1_All)
 stimList2_All = [stim for diffList in stimList2 for stim in diffList]
 np.random.shuffle(stimList2_All)
 
+correctCounter = 0
 ##########################################################
 isPressureFirst = bool(int(expInfo['participant']) % 2)
 if isPressureFirst:
@@ -134,7 +135,7 @@ InstructionInterface(instructionImg)
 firstRound = count()
 for stim in stimList1_All:
     c = next(firstRound)
-    if c % 10 == 0 and c != 0:
+    if c % 50 == 0 and c != 0:
         restInterface()   
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
@@ -155,14 +156,18 @@ InstructionInterface(instructionImg)
 secRound = count()
 for stim in stimList2_All:
     c = next(secRound)
-    if c % 10 == 0 and c != 0:
+    if c % 50 == 0 and c != 0:
         restInterface()   
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
     rightInd = abs(leftInd-1)
     left = stimDict[stim[leftInd]]
     right = stimDict[stim[rightInd]]
-    VBDM(thisExpChoice, left, right, difficulty, not isPressureFirst)
+    if int(stim[leftInd][0]) > int(stim[rightInd][0]):
+        corAns = 'left'
+    else:
+        corAns = 'right'
+    VBDM(thisExpChoice, left, right, difficulty, not isPressureFirst, corAns=corAns)
     Interval(2)
 
 ###########################################################
