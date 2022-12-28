@@ -43,7 +43,6 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
     while continueRoutine:
         if isTimePressure and routineTimer.getTime() <= 0:
             continueRoutine = False
-
         # get current time
         t = trialClock.getTime()
         tThisFlip = win.getFutureFlipTime(clock=trialClock)

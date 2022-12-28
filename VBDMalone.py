@@ -37,7 +37,7 @@ os.chdir(_thisDir)
 # Store info about the experiment session
 psychopyVersion = '2021.2.0'
 expName = 'VBDM'  # from the Builder filename that created this script
-expInfo = {'participant': ''}
+expInfo = {'participant': '', 'RatingPath':''}
 dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
 if dlg.OK == False:
     core.quit()  # user pressed cancel
@@ -56,11 +56,6 @@ filename = _thisDir + os.sep + \
     u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
 
 # An ExperimentHandler isn't essential but helps with data saving
-thisExpRating = data.ExperimentHandler(name=expName+'_Rating', version='',
-                                       extraInfo=expInfo, runtimeInfo=None,
-                                       savePickle=False, saveWideText=True,
-                                       dataFileName=filename+'_Rating')
-
 thisExpChoice = data.ExperimentHandler(name=expName+'_Choice', version='',
                                        extraInfo=expInfo, runtimeInfo=None,
                                        savePickle=False, saveWideText=True,
@@ -87,19 +82,10 @@ else:
 ###########################################################
 
 StartInterface()
-
-faceList = os.listdir('Face Choose')
-faceList = sorted(faceList, key=lambda x: int(re.search('\d+', x)[0]))
-np.random.shuffle(faceList)
-# print(faceList)
-for img in faceList:
-    singleImage(thisExpRating, img)
-
-thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim=',')
-#print('filename:', filename+'_RatingBackup'+'.csv')  # 不用這個會找不到檔案
+RatingPath = expInfo['RatingPath']
 
 ###########################################################
-Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
+Rating = pd.read_csv('data/'+RatingPath)
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
 Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
@@ -196,7 +182,6 @@ win.flip()
 # thisExpChoice.saveAsWideText(filename+'_Choice'+'.csv', delim=',')
 logging.flush()
 # make sure everything is closed down
-thisExpRating.abort()  # or data files will save again on exit
 thisExpChoice.abort()  # or data files will save again on exit
 win.close()
 core.quit()

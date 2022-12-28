@@ -166,6 +166,9 @@ def InstructionInterface(instructionImg):
     gotValidClick = False
     prevButtonState = mouse.getPressed()
     keys = ['placeholder']
+    print('instructionNoPress.png')
+    win.getMovieFrame()
+    win.saveMovieFrames('instructionNoPressure.png')
     while not gotValidClick:
         buttons = mouse.getPressed()
         if buttons != prevButtonState:  # button state changed?
