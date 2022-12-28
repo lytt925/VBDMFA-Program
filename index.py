@@ -100,8 +100,6 @@ thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim=',')
 
 ###########################################################
 Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
-# print(Rating)
-# Rating = pd.read_csv('data/1_Rating_2022-12-25-1438_Rating.csv')
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
 Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
@@ -143,15 +141,15 @@ for stim in stimList1_All:
     rightInd = abs(leftInd-1)
     left = stimDict[stim[leftInd]]
     right = stimDict[stim[rightInd]]
-    print(left, stim[leftInd])
-    print(right, stim[rightInd])
+    # print(left, stim[leftInd])
+    # print(right, stim[rightInd])
     if int(stim[leftInd][0]) > int(stim[rightInd][0]):
-        print('left big')
+        # print('left big')
         corAns = 'left'
     elif int(stim[leftInd][0]) < int(stim[rightInd][0]):
         corAns = 'right'
-        print('right big')
-    print('corAns',corAns)
+        # print('right big')
+    # print('corAns',corAns)
     VBDM(thisExpChoice, left, right, difficulty, isPressureFirst, corAns=corAns)
 
 ########################################################
@@ -179,10 +177,10 @@ for stim in stimList2_All:
         corAns = 'right'
     VBDM(thisExpChoice, left, right, difficulty, not isPressureFirst, corAns=corAns)
 
-###########################################################
+##########################################################
 thisExpChoice.saveAsWideText(filename+'_ChoiceBackup'+'.csv', delim=',')
 VBDMresult = pd.read_csv(filename+'_ChoiceBackup'+'.csv')
-accuracy = VBDMresult['Correct'].mean()
+accuracy = VBDMresult['Correct'].replace({'None': 0}).astype(int).mean()
 EndInterface(accuracy)
 
 ############################################################

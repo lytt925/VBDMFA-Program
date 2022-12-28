@@ -95,7 +95,7 @@ def createSecondStim(NowCounts, prevDiffCom, allcounts):
     return stimList, stimOccur, diffComcopy
 
 def makeStim(allcounts):
-    NowCounts=5
+    NowCounts=3
     while True:
         stimList1, stimOccur1, newDiffComcopy = createFirstStim(NowCounts, allcounts)
         total = len([item for rating in stimList1 for item in rating])
@@ -103,7 +103,7 @@ def makeStim(allcounts):
             break
         else:
             NowCounts+=1
-    NowCounts=5
+    NowCounts=3
     while True:
         diffComcopy = copy.deepcopy(newDiffComcopy)
         stimList2, stimOccur2, lastDiffComcopy = createSecondStim(NowCounts, diffComcopy, allcounts)

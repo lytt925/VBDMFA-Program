@@ -53,7 +53,7 @@ text_wait = visual.ImageStim(win=win, name='wait',
     image='./ratingRoutines/StartInterface.png', mask=None, pos = (0,100), size = (2680/2,271/2))
 
 text_end = visual.TextStim(win=win, name='end',
-    text='', font='Calibri',
+    text='', font='Calibri', height=25, wrapWidth=1000,
     color='black', pos = (0,100))
 
 text_rest = visual.TextStim(win=win, name='end',
