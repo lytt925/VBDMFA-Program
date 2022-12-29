@@ -102,7 +102,6 @@ thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim=',')
 Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
-Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
 print('ratings_counts', ratings_counts)
 lessthan9 = False
@@ -114,6 +113,7 @@ lessthan15 = False
 if ratings_counts[max(ratings_counts.index)] < 15:
     lessthan15 = True
     Rating['rating']+=1
+Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
 print(ratings_counts)
 allcounts = [ratings_counts[i] for i in range(5, 10)]

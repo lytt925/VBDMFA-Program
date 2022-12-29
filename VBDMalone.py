@@ -88,12 +88,18 @@ RatingPath = expInfo['RatingPath']
 Rating = pd.read_csv('data/'+RatingPath)
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
-Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
 print('ratings_counts', ratings_counts)
-if max(ratings_counts.index) < 9 or ratings_counts[max(ratings_counts.index)] < 15:
+lessthan9 = False
+if max(ratings_counts.index) < 9:
+    lessthan9 = True
     distance = 9-max(ratings_counts.index)
     Rating['rating']+=distance
+lessthan15 = False
+if ratings_counts[max(ratings_counts.index)] < 15:
+    lessthan15 = True
+    Rating['rating']+=1
+Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
 print(ratings_counts)
 allcounts = [ratings_counts[i] for i in range(5, 10)]
@@ -177,6 +183,8 @@ thisExpChoice.saveAsWideText(filename+'_ChoiceBackup'+'.csv', delim=',')
 VBDMresult = pd.read_csv(filename+'_ChoiceBackup'+'.csv')
 accuracy = VBDMresult['Correct'].replace({'None': 0}).astype(int).mean()
 EndInterface(accuracy)
+Log = pd.DataFrame({'lessthan9': lessthan9, 'lessthan15': lessthan15, 'nowcounts1': NowCounts1, 'nowcounts2': NowCounts2})
+Log.to_csv(filename+'_log'+'.csv')
 
 ############################################################
 # Flip one final time so any remaining win.callOnFlip()
