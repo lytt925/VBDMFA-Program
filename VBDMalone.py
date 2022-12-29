@@ -91,6 +91,11 @@ Rating = Rating.sort_values(
 Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
 print('ratings_counts', ratings_counts)
+if max(ratings_counts.index) < 9 or ratings_counts[max(ratings_counts.index)] < 15:
+    distance = 9-max(ratings_counts.index)
+    Rating['rating']+=distance
+ratings_counts = Rating['rating'].value_counts()
+print(ratings_counts)
 allcounts = [ratings_counts[i] for i in range(5, 10)]
 temp = [list(np.repeat(i+5, count)) for i, count in enumerate(allcounts)]
 ratings = [[str(level)+'_'+str(ind+1)
