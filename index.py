@@ -197,7 +197,6 @@ thisExpChoice.saveAsWideText(filename+'_ChoiceBackup'+'.csv', delim=',')
 VBDMresult = pd.read_csv(filename+'_ChoiceBackup'+'.csv')
 accuracy = VBDMresult['Correct'].replace({'None': 0}).astype(int).mean()
 EndInterface(accuracy)
-
 Log = pd.DataFrame({'lessthan9': lessthan9, 'lessthan15': lessthan15, 'nowcounts1': NowCounts1, 'nowcounts2': NowCounts2})
 Log.to_csv(filename+'_log'+'.csv')
 
