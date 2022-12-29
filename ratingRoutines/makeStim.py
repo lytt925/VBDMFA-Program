@@ -103,6 +103,7 @@ def makeStim(allcounts):
             break
         else:
             NowCounts+=1
+    NowCounts1 = NowCounts
     NowCounts=5
     while True:
         diffComcopy = copy.deepcopy(newDiffComcopy)
@@ -112,6 +113,7 @@ def makeStim(allcounts):
             break
         else:
             NowCounts+=1
+    NowCounts2 = NowCounts
     
-    return stimList1, stimList2
+    return stimList1, stimList2, NowCounts1, NowCounts2
     
