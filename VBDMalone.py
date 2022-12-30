@@ -88,6 +88,7 @@ RatingPath = expInfo['RatingPath']
 Rating = pd.read_csv('data/'+RatingPath)
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
+Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
 print('ratings_counts', ratings_counts)
 lessthan9 = False
@@ -96,7 +97,7 @@ if max(ratings_counts.index) < 9:
     distance = 9-max(ratings_counts.index)
     Rating['rating']+=distance
 lessthan15 = False
-if ratings_counts[max(ratings_counts.index)] < 15:
+if ratings_counts[max(ratings_counts.index)] < 10:
     lessthan15 = True
     Rating['rating']+=1
 Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
@@ -115,7 +116,7 @@ for i, level in enumerate(ratings):
 text_end.text = 'Loading'
 text_end.draw()
 win.flip()
-stimList1, stimList2 = makeStim(allcounts)
+stimList1, stimList2, NowCounts1, NowCounts2 = makeStim(allcounts)
 win.flip()
 stimList1_All = [stim for diffList in stimList1 for stim in diffList]
 np.random.shuffle(stimList1_All)

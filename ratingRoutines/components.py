@@ -182,6 +182,7 @@ def InstructionInterface(instructionImg):
     win.flip()
 
 def Interval(second):
+    routineTimer.reset()
     cross.draw()
     win.flip()
     routineTimer.add(second)
