@@ -20,7 +20,7 @@ image = visual.ImageStim(
 
 slider = visual.Slider(win=win, name='slider',
     size=(400, 40), pos=(0, -100), units=None,
-    labels=[-4, -3, -2, -1, 1, 2, 3, 4], ticks=(2, 3, 4, 5, 6, 7, 8, 9), 
+    labels=[1,2,3,4,5,6,7,8], ticks=(1, 2, 3, 4, 5, 6, 7, 8), 
     granularity=1.0,
     style=('rating', 'whiteOnBlack'),
     color='black', font='HelveticaBold', labelHeight=20,

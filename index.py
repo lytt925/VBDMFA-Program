@@ -102,6 +102,7 @@ thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim=',')
 Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
+    
 Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
 print('ratings_counts', ratings_counts)
@@ -127,6 +128,8 @@ for i, level in enumerate(ratings):
     for key in level:
         stimDict[key] = next(iterator)
 
+
+##########################################################
 text_end.text = 'Loading'
 text_end.draw()
 win.flip()
