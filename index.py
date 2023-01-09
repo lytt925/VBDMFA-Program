@@ -103,44 +103,31 @@ Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
     
-Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
 ratings_counts = Rating['rating'].value_counts()
-print('ratings_counts', ratings_counts)
-lessthan9 = False
-if max(ratings_counts.index) < 9:
-    lessthan9 = True
-    distance = 9-max(ratings_counts.index)
-    Rating['rating']+=distance
-lessthan15 = False
-if ratings_counts[max(ratings_counts.index)] < 10:
-    lessthan15 = True
-    Rating['rating']+=1
-Rating.loc[Rating.query('rating==10').index, 'rating'] = 9
-ratings_counts = Rating['rating'].value_counts()
-print(ratings_counts)
-allcounts = [ratings_counts[i] for i in range(5, 10)]
-temp = [list(np.repeat(i+5, count)) for i, count in enumerate(allcounts)]
+chooseStim='345678'
+allcounts = [ratings_counts[i] for i in range(int(chooseStim[0]), int(chooseStim[-1])+1)]
+temp = [list(np.repeat(i+int(chooseStim[0]), count)) for i, count in enumerate(allcounts)]
 ratings = [[str(level)+'_'+str(ind+1)
             for ind, level in enumerate(levelList)] for levelList in temp]
-stimDict = {}
+
+imgDict = {}
 for i, level in enumerate(ratings):
-    iterator = iter(list(Rating[Rating['rating'] == i+5]['Name']))
-    for key in level:
-        stimDict[key] = next(iterator)
+    stims = list(Rating[Rating['rating'] == i+int(chooseStim[0])]['Name'])
+    for key, value in zip(level, stims):
+        imgDict[key] = value
 
 
 ##########################################################
 text_end.text = 'Loading'
 text_end.draw()
 win.flip()
-stimList1, stimList2, NowCounts1, NowCounts2 = makeStim(allcounts)
+stimDict1, stimDict2, NowCounts1, NowCounts2 = makeStim(allcounts)
 win.flip()
-stimList1_All = [stim for diffList in stimList1 for stim in diffList]
+stimList1_All = [stim for diffList in stimDict1.values() for stim in diffList]
 np.random.shuffle(stimList1_All)
-stimList2_All = [stim for diffList in stimList2 for stim in diffList]
+stimList2_All = [stim for diffList in stimDict2.values() for stim in diffList]
 np.random.shuffle(stimList2_All)
 
-correctCounter = 0
 ##########################################################
 isPressureFirst = bool(int(expInfo['participant']) % 2)
 if isPressureFirst:
@@ -158,8 +145,8 @@ for stim in stimList1_All:
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
     rightInd = abs(leftInd-1)
-    left = stimDict[stim[leftInd]]
-    right = stimDict[stim[rightInd]]
+    left = imgDict[stim[leftInd]]
+    right = imgDict[stim[rightInd]]
     # print(left, stim[leftInd])
     # print(right, stim[rightInd])
     if int(stim[leftInd][0]) > int(stim[rightInd][0]):
@@ -188,8 +175,8 @@ for stim in stimList2_All:
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
     leftInd = np.random.randint(2)
     rightInd = abs(leftInd-1)
-    left = stimDict[stim[leftInd]]
-    right = stimDict[stim[rightInd]]
+    left = imgDict[stim[leftInd]]
+    right = imgDict[stim[rightInd]]
     if int(stim[leftInd][0]) > int(stim[rightInd][0]):
         corAns = 'left'
     elif int(stim[leftInd][0]) < int(stim[rightInd][0]):
@@ -204,8 +191,6 @@ try:
 except:
     accuracy = VBDMresult['Correct'].astype(int).mean()
 EndInterface(accuracy)
-Log = pd.DataFrame({'lessthan9': lessthan9, 'lessthan15': lessthan15, 'nowcounts1': NowCounts1, 'nowcounts2': NowCounts2}, index=[0])
-Log.to_csv(filename+'_log'+'.csv')
 
 ############################################################
 # Flip one final time so any remaining win.callOnFlip()
