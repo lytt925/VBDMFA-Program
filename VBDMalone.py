@@ -121,6 +121,7 @@ if isPressureFirst:
 else:
     instructionImg = './ratingRoutines/noPressure.png'
 
+
 InstructionInterface(instructionImg)
 firstRound = count()
 for stim in stimList1_All:

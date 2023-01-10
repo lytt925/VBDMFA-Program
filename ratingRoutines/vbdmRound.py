@@ -125,6 +125,7 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
 
     thisExp.addData('Trial', str(difficulty)+'_'+leftPic[:-4]+"_"+rightPic[:-4])
     thisExp.addData('TP', isTimePressure)
+    thisExp.addData('diff', difficulty)
     thisExp.addData('CorrectAns', corAns)
     thisExp.addData('choice', key_Choice.keys)
     thisExp.addData('RT', key_Choice.rt)
