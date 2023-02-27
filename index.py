@@ -12,6 +12,10 @@ If you publish work using this script the most relevant publication is:
 """
 
 from __future__ import absolute_import, division
+from ratingRoutines.ratings import singleImage
+from ratingRoutines.vbdmRound import *
+from ratingRoutines.makeStim import makeStim
+from ratingRoutines.components import *
 
 
 from psychopy import locale_setup
@@ -46,10 +50,6 @@ expInfo['date'] = data.getDateStr(
 expInfo['expName'] = expName
 expInfo['psychopyVersion'] = psychopyVersion
 
-from ratingRoutines.components import *
-from ratingRoutines.makeStim import makeStim
-from ratingRoutines.vbdmRound import *
-from ratingRoutines.ratings import singleImage
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + \
@@ -96,17 +96,19 @@ for img in faceList:
     singleImage(thisExpRating, img)
 
 thisExpRating.saveAsWideText(filename+'_RatingBackup'+'.csv', delim=',')
-#print('filename:', filename+'_RatingBackup'+'.csv')  # 不用這個會找不到檔案
+# print('filename:', filename+'_RatingBackup'+'.csv')  # 不用這個會找不到檔案
 
 ###########################################################
 Rating = pd.read_csv(filename+'_RatingBackup'+'.csv')
 Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
-    
+
 ratings_counts = Rating['rating'].value_counts()
-chooseStim='345678'
-allcounts = [ratings_counts[i] for i in range(int(chooseStim[0]), int(chooseStim[-1])+1)]
-temp = [list(np.repeat(i+int(chooseStim[0]), count)) for i, count in enumerate(allcounts)]
+chooseStim = '2345678'
+allcounts = [ratings_counts[i]
+             for i in range(int(chooseStim[0]), int(chooseStim[-1])+1)]
+temp = [list(np.repeat(i+int(chooseStim[0]), count))
+        for i, count in enumerate(allcounts)]
 ratings = [[str(level)+'_'+str(ind+1)
             for ind, level in enumerate(levelList)] for levelList in temp]
 
@@ -137,13 +139,26 @@ else:
 
 InstructionInterface(instructionImg)
 firstRound = count()
+lows = np.repeat(0, 100)
+highs = np.repeat(1, 100)
+orders1 = np.concatenate([lows, highs])
+orders2 = np.concatenate([lows, highs])
+orders3 = np.concatenate([lows, highs])
+np.random.shuffle(orders1)
+np.random.shuffle(orders2)
+np.random.shuffle(orders3)
 for stim in stimList1_All:
     c = next(firstRound)
     if c % 50 == 0 and c != 0:
-        restInterface()   
-    Interval(2)
+        restInterface()
+    Interval(1.5)
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
-    leftInd = np.random.randint(2)
+    if difficulty == 1:
+        leftInd = orders1[c]
+    elif difficulty == 2:
+        leftInd = orders2[c]
+    else:
+        leftInd = orders3[c]
     rightInd = abs(leftInd-1)
     left = imgDict[stim[leftInd]]
     right = imgDict[stim[rightInd]]
@@ -167,13 +182,21 @@ else:
 InstructionInterface(instructionImg)
 
 secRound = count()
+np.random.shuffle(orders1)
+np.random.shuffle(orders2)
+np.random.shuffle(orders3)
 for stim in stimList2_All:
     c = next(secRound)
     if c % 50 == 0 and c != 0:
-        restInterface()   
-    Interval(2)
+        restInterface()
+    Interval(1.5)
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
-    leftInd = np.random.randint(2)
+    if difficulty == 1:
+        leftInd = orders1[c]
+    elif difficulty == 2:
+        leftInd = orders2[c]
+    else:
+        leftInd = orders3[c]
     rightInd = abs(leftInd-1)
     left = imgDict[stim[leftInd]]
     right = imgDict[stim[rightInd]]
@@ -181,7 +204,8 @@ for stim in stimList2_All:
         corAns = 'left'
     elif int(stim[leftInd][0]) < int(stim[rightInd][0]):
         corAns = 'right'
-    VBDM(thisExpChoice, left, right, difficulty, not isPressureFirst, corAns=corAns)
+    VBDM(thisExpChoice, left, right, difficulty,
+         not isPressureFirst, corAns=corAns)
 
 ##########################################################
 thisExpChoice.saveAsWideText(filename+'_ChoiceBackup'+'.csv', delim=',')

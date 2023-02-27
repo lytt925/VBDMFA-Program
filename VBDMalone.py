@@ -90,7 +90,7 @@ Rating = Rating.sort_values(
     'Name', key=lambda x: sorted(x.str.slice(start=2, stop=-4)))
     
 ratings_counts = Rating['rating'].value_counts()
-chooseStim='345678'
+chooseStim='2345678'
 allcounts = [ratings_counts[i] for i in range(int(chooseStim[0]), int(chooseStim[-1])+1)]
 temp = [list(np.repeat(i+int(chooseStim[0]), count)) for i, count in enumerate(allcounts)]
 ratings = [[str(level)+'_'+str(ind+1)
@@ -121,16 +121,19 @@ if isPressureFirst:
 else:
     instructionImg = './ratingRoutines/noPressure.png'
 
-
 InstructionInterface(instructionImg)
 firstRound = count()
+lows = np.repeat(0, len(stimList1_All)/2)
+highs = np.repeat(1, len(stimList1_All)/2)
+orders = np.concatenate([lows, highs])
+np.random.shuffle(orders)
 for stim in stimList1_All:
     c = next(firstRound)
     if c % 50 == 0 and c != 0:
         restInterface()   
-    Interval(2)
+    Interval(1.5)
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
-    leftInd = np.random.randint(2)
+    leftInd = orders[c]
     rightInd = abs(leftInd-1)
     left = imgDict[stim[leftInd]]
     right = imgDict[stim[rightInd]]
@@ -154,13 +157,14 @@ else:
 InstructionInterface(instructionImg)
 
 secRound = count()
+np.random.shuffle(orders)
 for stim in stimList2_All:
     c = next(secRound)
     if c % 50 == 0 and c != 0:
         restInterface()   
-    Interval(2)
+    Interval(1.5)
     difficulty = abs(int(stim[1].split('_')[0])-int(stim[0].split('_')[0]))
-    leftInd = np.random.randint(2)
+    leftInd = orders[c]
     rightInd = abs(leftInd-1)
     left = imgDict[stim[leftInd]]
     right = imgDict[stim[rightInd]]
@@ -173,9 +177,11 @@ for stim in stimList2_All:
 ##########################################################
 thisExpChoice.saveAsWideText(filename+'_ChoiceBackup'+'.csv', delim=',')
 VBDMresult = pd.read_csv(filename+'_ChoiceBackup'+'.csv')
-accuracy = VBDMresult['Correct'].replace({'None': 0}).astype(int).mean()
+try:
+    accuracy = VBDMresult['Correct'].replace({'None': 0}).astype(int).mean()
+except:
+    accuracy = VBDMresult['Correct'].astype(int).mean()
 EndInterface(accuracy)
-
 
 ############################################################
 # Flip one final time so any remaining win.callOnFlip()

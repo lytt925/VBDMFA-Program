@@ -16,8 +16,8 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
 
     # ------Prepare to start Routine "trial"-------
     continueRoutine = True
-    if isTimePressure:
-        routineTimer.add(2) #  choicetime
+    # if isTimePressure:
+        # routineTimer.add(1.5) #  choicetime
     # update component parameters for each repeat
     # setup some python lists for storing info about the mouse
     key_Choice.keys = []
@@ -41,8 +41,8 @@ def VBDM(thisExp, leftPic, rightPic, difficulty, isTimePressure, corAns):
     # -------Run Routine "trial"-------
     # time1 = trialClock.getTime()
     while continueRoutine:
-        if isTimePressure and routineTimer.getTime() <= 0:
-            continueRoutine = False
+        # if isTimePressure and routineTimer.getTime() <= 0:
+        #     continueRoutine = False
         # get current time
         t = trialClock.getTime()
         tThisFlip = win.getFutureFlipTime(clock=trialClock)
